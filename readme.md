@@ -1,5 +1,5 @@
 # QueryBuilder
-# example query:
+# examples query:
 
 * $testBase->select('name', 'last_name')->from('test_table')->save();
 
