@@ -8,11 +8,13 @@ use Core\Controllers\BuilderController;
 class Executor
 {
     private DataBase $dataBase;
+    private BuilderController $builderController;
     private array $query = [];
 
     public function __construct(array $config)
     {
         $this->dataBase = new DataBase($config);
+        $this->builderController = new BuilderController();
     }
 
     public function __call(string $name, array $arguments)
@@ -36,8 +38,7 @@ class Executor
 
     protected function isValid(): bool|string
     {
-        $builder = new BuilderController();
-        return $builder->filter()->getFormedQuery(query: $this->query);
+        return $this->builderController->filter()->getFormedQuery(query: $this->query);
     }
 
     public function save(): bool|\PDOStatement
