@@ -13,4 +13,3 @@ $config = [
 ];
 
 $testBase = new Executor($config);
-$testBase->delete('test_table')->where('age', '=', 13)->save();

@@ -2,25 +2,24 @@
 
 namespace Core\Controllers;
 
-use Core\Filters\Validator\DepthProcessing\Handlers\ConditionHandler;
-use Core\Filters\Validator\DepthProcessing\Handlers\MultiLevelHandler;
-use Core\Filters\Validator\DepthProcessing\Handlers\SingleLevelHandler;
+use Core\Filters\Validator\DepthProcessingHandlers\ConditionLevelDepthLevelHandler;
+use Core\Filters\Validator\DepthProcessingHandlers\MultiLevelDepthLevelHandler;
+use Core\Filters\Validator\DepthProcessingHandlers\SingleLevelDepthLevelHandler;
 
 class ProcessDepthController
 {
-
-    public function singleLevel(array $values, bool $mode = true): string
+    public function singleLevel(array $values, $mode): string
     {
-        return SingleLevelHandler::getFormatQuery(value: $values, mode: $mode);
+        return (new SingleLevelDepthLevelHandler())->getFormatQuery($values, $mode);
     }
 
-    public function multilevelLevel(array $values, bool $mode = true): string
+    public function multiLevel(array $values): string
     {
-        return MultiLevelHandler::getFormatQuery(value: $values, mode: $mode);
+        return (new MultiLevelDepthLevelHandler())->getFormatQuery($values);
     }
 
-    public function conditionLevel(array $values, bool $mode = true): string
+    public function conditionLevel(array $values): string
     {
-        return ConditionHandler::getFormatQuery(value: $values, mode: $mode);
+        return (new ConditionLevelDepthLevelHandler())->getFormatQuery($values);
     }
 }

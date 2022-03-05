@@ -18,23 +18,23 @@ class Commands
         return $this->$method($values);
     }
 
-    protected function singleLevelAction(string $method, array $values, $mode = true): string
+    protected function singleLevelAction(string $method, array $values, bool $mode = true): string
     {
         $formatValues = $this->depthController->singleLevel(values: $values, mode: $mode);
 
         return "{$method} {$formatValues}";
     }
 
-    protected function multiLevelAction(string $method, array $values, $mode = true): string
+    protected function multiLevelAction(string $method, array $values): string
     {
-        $formatValues = $this->depthController->multilevelLevel(values: $values, mode: $mode);
+        $formatValues = $this->depthController->multiLevel(values: $values);
 
         return "{$method} {$formatValues}";
     }
 
-    protected function conditionAction(string $method, array $values, $mode = true): string
+    protected function conditionAction(string $method, array $values): string
     {
-        $condition = $this->depthController->conditionLevel(values: $values, mode: $mode);
+        $condition = $this->depthController->conditionLevel(values: $values);
 
         return "{$method} {$condition}";
     }
@@ -43,15 +43,15 @@ class Commands
     {
         $method = "INSERT INTO";
         $table = $values[0];
-        $formatValues = $this->depthController->singleLevel($values[1]);
+        $formatValues = $this->depthController->singleLevel(values: $values[1], mode: true);
 
-        return "{$method} {$table} ({$formatValues})";
+        return "{$method} \"{$table}\" ({$formatValues})";
     }
 
     protected function values(array $values): string
     {
         $method = 'VALUES';
-        $formatValues = $this->depthController->singleLevel($values, false);
+        $formatValues = $this->depthController->singleLevel(values: $values, mode: false);
 
         return "{$method} ({$formatValues})";
     }
@@ -103,7 +103,7 @@ class Commands
 
     protected function set(array $values): string
     {
-        return $this->multiLevelAction(method: 'SET', values: $values, mode: false);
+        return $this->multiLevelAction(method: 'SET', values: $values);
     }
 
     protected function join(array $values): string
