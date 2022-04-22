@@ -1,0 +1,11 @@
+{
+    "name": "mihan/query-builder_v2",
+    "autoload": {
+        "psr-4": {
+            "Core\\": "src/"
+        }
+    },
+    "require": {
+        "ext-pdo": "*"
+    }
+}
