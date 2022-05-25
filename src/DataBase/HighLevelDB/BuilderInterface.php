@@ -1,12 +1,12 @@
 <?php
 
-namespace Core\DataBase;
+namespace Core\DataBase\HighLevelDB;
 
 interface BuilderInterface
 {
     public function select(array $rows): static;
 
-    public function insert(string $table, array|null $fields): static;
+    public function insert(string $table, array $fields): static;
 
     public function delete(): static;
 
@@ -42,13 +42,7 @@ interface BuilderInterface
 
     public function where(string $row, string $value, string $sign): static;
 
-    public function orderBy(string $orderValue): static;
+    public function orderBy(array $orderValues): static;
 
     public function as(string $alias): static;
-
-    public function save(): bool;
-
-    public function get(): array;
-
-    public function first(): object;
 }

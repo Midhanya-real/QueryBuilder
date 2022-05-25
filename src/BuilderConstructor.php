@@ -4,8 +4,10 @@ namespace Core;
 
 use Core\Connection\ConnectionInterface;
 use Core\Connection\PgsqlConnection;
-use Core\DataBase\PostgresBuilder;
-use Core\DataBase\BuilderInterface;
+use Core\DataBase\HighLevelDB\BuilderInterface;
+use Core\DataBase\HighLevelDB\PostgresBuilder;
+use Core\Validation\FetchValidation\FetchInterface;
+use Core\Validation\FetchValidation\FetchValidator;
 use PDO;
 
 class BuilderConstructor
@@ -24,16 +26,21 @@ class BuilderConstructor
         };
     }
 
-    protected function getBuilder(PDO $connect): BuilderInterface
+    protected function getBuilder(): BuilderInterface
     {
         return match ($this->config['Connection']) {
-            'pgsql' => new PostgresBuilder($connect),
+            'pgsql' => new PostgresBuilder(),
         };
     }
 
-    public function build(): BuilderInterface
+    protected function getFetch(PDO $connect): FetchInterface
     {
-        $connect = $this->getConnect()->connect($this->config);
-        return $this->getBuilder($connect);
+        return new FetchValidator($connect);
+    }
+
+    public function build()
+    {
+//        $connect = $this->getConnect()->connect($this->config);
+//        return $this->getBuilder();
     }
 }
