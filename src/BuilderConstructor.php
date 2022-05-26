@@ -4,8 +4,11 @@ namespace Core;
 
 use Core\Connection\ConnectionInterface;
 use Core\Connection\PgsqlConnection;
-use Core\DataBase\HighLevelDB\BuilderInterface;
+use Core\DataBase\GetLevel;
+use Core\DataBase\HighLevelDB\HighLevelBuilderInterface;
 use Core\DataBase\HighLevelDB\PostgresBuilder;
+use Core\DataBase\LowLevelDB\LowLevelBuilderInterface;
+use Core\DataBase\LowLevelDB\MySqlBuilder;
 use Core\Validation\FetchValidation\FetchInterface;
 use Core\Validation\FetchValidation\FetchValidator;
 use PDO;
@@ -26,10 +29,13 @@ class BuilderConstructor
         };
     }
 
-    protected function getBuilder(): BuilderInterface
+    protected function getBuilder(): HighLevelBuilderInterface|LowLevelBuilderInterface
     {
         return match ($this->config['Connection']) {
-            'pgsql' => new PostgresBuilder(),
+            'pgsql' => (new GetLevel())->getHighDb(PostgresBuilder::class),
+            'mysql' => (new GetLevel())->getLowDb(MySqlBuilder::class),
+
+            //...
         };
     }
 
@@ -40,7 +46,6 @@ class BuilderConstructor
 
     public function build()
     {
-//        $connect = $this->getConnect()->connect($this->config);
-//        return $this->getBuilder();
+
     }
 }

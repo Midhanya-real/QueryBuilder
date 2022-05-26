@@ -5,7 +5,7 @@ namespace Core\DataBase\HighLevelDB;
 use Core\Actions\QueryParts\SetAction;
 use Core\Actions\QueryParts\ValueAction;
 
-class PostgresBuilder implements BuilderInterface
+class PostgresBuilder implements HighLevelBuilderInterface
 {
     private array $queryObject = [
         'query' => '',
