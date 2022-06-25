@@ -2,13 +2,12 @@
 
 namespace Core;
 
-use Core\Connection\ConnectionInterface;
 use Core\Connection\PgsqlConnection;
-use Core\DataBase\GetLevel;
-use Core\DataBase\HighLevelDB\HighLevelBuilderInterface;
-use Core\DataBase\HighLevelDB\PostgresBuilder;
-use Core\DataBase\LowLevelDB\LowLevelBuilderInterface;
-use Core\DataBase\LowLevelDB\MySqlBuilder;
+use Core\DataBase\DataBases\PostgresBuilderInterface;
+use Core\DataBase\GetDB;
+use Core\DataBase\GetDBInterface;
+use Core\Validation\BuildersValidation\PostgresBuilderValidation;
+use Core\Validation\BuildersValidation\PostgresBuilderValidationInterface;
 use Core\Validation\FetchValidation\FetchInterface;
 use Core\Validation\FetchValidation\FetchValidator;
 use PDO;
@@ -22,30 +21,52 @@ class BuilderConstructor
         $this->config = $config;
     }
 
-    protected function getConnect(): ConnectionInterface
+    protected function getConnect(): PgsqlConnection
     {
         return match ($this->config['Connection']) {
             'pgsql' => new PgsqlConnection(),
+
+            //
         };
     }
 
-    protected function getBuilder(): HighLevelBuilderInterface|LowLevelBuilderInterface
+    protected function getDB(): GetDBInterface
+    {
+        return new GetDB();
+    }
+
+    protected function getBuilder(): PostgresBuilderInterface
     {
         return match ($this->config['Connection']) {
-            'pgsql' => (new GetLevel())->getHighDb(PostgresBuilder::class),
-            'mysql' => (new GetLevel())->getLowDb(MySqlBuilder::class),
+            'pgsql' => $this->getDB()->pgsql(),
 
-            //...
+            //
         };
     }
 
-    protected function getFetch(PDO $connect): FetchInterface
+    protected function getFetch(PDO $connect, array $queryObject): FetchInterface
     {
-        return new FetchValidator($connect);
+        return new FetchValidator($connect, $queryObject);
     }
 
-    public function build()
+    protected function getValidator(): PostgresBuilderValidationInterface
     {
+        return match ($this->config['Connection']) {
+            'pgsql' => new PostgresBuilderValidation($this->getBuilder()),
 
+            //
+        };
+    }
+
+    public function build(): PostgresBuilderValidation
+    {
+        return $this->getValidator();
+    }
+
+    public function execute(array $queryObject): FetchInterface
+    {
+        $connect = $this->getConnect()->connect($this->config);
+
+        return $this->getFetch($connect, $queryObject);
     }
 }

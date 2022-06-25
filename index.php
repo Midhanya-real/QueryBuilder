@@ -7,37 +7,17 @@ use Core\BuilderConstructor;
 $config = Config::getConfig();
 $exec = new BuilderConstructor($config);
 
-//$test = $exec->build()->select(['user_name', 'sum(age)'])->as('age')->from('test_table')->groupBy(['user_name'])->get();
-//$test = $exec->build()->insert('', [])->values([1, 18921, 1]);
-//$test = $exec->build()->delete()->from('some_table')->where('user_id', 1)->first();
-//$test = $exec->build()->select()->from('test_table')->where('id', 2)->save();
-/*$test = $exec->build()->select(
-    [
-        'some_table.id',
-        'some_table.number',
-        'test_table.user_name',
-        'test_table.age'
-    ]
-)
-    ->from('some_table')
-    ->join('test_table')
-    ->on('some_table.user_id', 'test_table.id')
-    ->save();
-*/
 
+//$test = $exec->build()->select('some_table', ['some_table.id' => 'serial', 'some_table.number' => 'phone'])->getQueryObject();
+//$test_one = $exec->build()->insert('some_table', ['id' => 2, 'number' => 8124, 'user_id' => 1])->getQueryObject();
+//$test_two = $exec->build()->delete('some_table')->where(['number' => 8125])->getQueryObject();
+//$test = $exec->build()->update('some_table', ['number' => 8125])->where(['number' => 8124])->getQueryObject();
+/*$test = $exec->build()
+    ->select('some_table', ['some_table.number', 'test_table.user_name'],)
+    ->join('test_table', ['some_table.user_id' => 'test_table.id'])->getQueryObject();*/
+//$test = $exec->build()->select('test_table', ['user_name', 'age'])->orderBy(['user_name' => 'ASC', 'age' => 'DESC'])->getQueryObject();
+//$test = $exec->build()->select('test_table', ['user_name', 'sum(age)' => 'counter'])->groupBy(['user_name', 'counter'])->having('counter', '<', 16)->getQueryObject();
+//print_r($exec->execute($test)->get());
 //print_r($test);
-
-/*class Test
-{
-    protected $row1 = [1, 2, 3, 4, 5];
-    protected $row2 = 'query';
-
-    public function query(): static
-    {
-        $this->row2 .= ' query FROM';
-
-        return $this;
-    }
-}
-
-print_r((new Test())->query());*/
+//print_r($test_one);
+//print_r($test_two);
