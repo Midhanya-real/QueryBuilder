@@ -1,9 +1,11 @@
 <?php
 
 namespace Core\Validation\BuildersValidation;
-use \Core\DataBase\DataBases\PostgresBuilderInterface;
+use Core\DataBase\QueryPartsInterfaces\CRUDMethodsInterface;
+use Core\DataBase\QueryPartsInterfaces\LinksMethodsInterface;
+use Core\DataBase\QueryPartsInterfaces\SortMethodsInterface;
 
-interface PostgresBuilderValidationInterface
+interface PostgresBuilderValidationInterface extends CRUDMethodsInterface, LinksMethodsInterface, SortMethodsInterface
 {
     public function select(string $table, array $fields): static;
 

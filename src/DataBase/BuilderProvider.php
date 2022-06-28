@@ -5,7 +5,7 @@ namespace Core\DataBase;
 use Core\DataBase\DataBases\PostgresBuilder;
 use Core\DataBase\DataBases\PostgresBuilderInterface;
 
-class GetDB implements GetDBInterface
+class BuilderProvider implements BuilderProviderInterface
 {
     public function pgsql(): PostgresBuilderInterface
     {

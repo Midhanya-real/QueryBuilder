@@ -4,7 +4,7 @@ namespace Core\DataBase;
 
 use Core\DataBase\DataBases\PostgresBuilderInterface;
 
-interface GetDBInterface
+interface BuilderProviderInterface
 {
     public function pgsql(): PostgresBuilderInterface;
 }

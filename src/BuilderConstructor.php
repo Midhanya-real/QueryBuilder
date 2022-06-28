@@ -4,8 +4,8 @@ namespace Core;
 
 use Core\Connection\PgsqlConnection;
 use Core\DataBase\DataBases\PostgresBuilderInterface;
-use Core\DataBase\GetDB;
-use Core\DataBase\GetDBInterface;
+use Core\DataBase\BuilderProvider;
+use Core\DataBase\BuilderProviderInterface;
 use Core\Validation\BuildersValidation\PostgresBuilderValidation;
 use Core\Validation\BuildersValidation\PostgresBuilderValidationInterface;
 use Core\Validation\FetchValidation\FetchInterface;
@@ -30,9 +30,14 @@ class BuilderConstructor
         };
     }
 
-    protected function getDB(): GetDBInterface
+    protected function getDB(): BuilderProviderInterface
     {
-        return new GetDB();
+        return new BuilderProvider();
+    }
+
+    protected function getFetch(PDO $connect, array $queryObject): FetchInterface
+    {
+        return new FetchValidator($connect, $queryObject);
     }
 
     protected function getBuilder(): PostgresBuilderInterface
@@ -42,11 +47,6 @@ class BuilderConstructor
 
             //
         };
-    }
-
-    protected function getFetch(PDO $connect, array $queryObject): FetchInterface
-    {
-        return new FetchValidator($connect, $queryObject);
     }
 
     protected function getValidator(): PostgresBuilderValidationInterface

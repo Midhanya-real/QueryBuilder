@@ -18,7 +18,7 @@ class FetchValidator implements FetchInterface
 
     public function save(): bool
     {
-        $this->queryObject['params'] = InLineParamsAction::inLine($this->queryObject['params']);
+        $this->queryObject['params'] = InLineParamsAction::inLineParams($this->queryObject['params']);
 
         $query = $this->connect->prepare($this->queryObject['query']);
         $query->execute($this->queryObject['params']);
@@ -28,7 +28,7 @@ class FetchValidator implements FetchInterface
 
     public function get(): array
     {
-        $this->queryObject['params'] = InLineParamsAction::inLine($this->queryObject['params']);
+        $this->queryObject['params'] = InLineParamsAction::inLineParams($this->queryObject['params']);
 
         $query = $this->connect->prepare($this->queryObject['query']);
         $query->execute($this->queryObject['params']);
@@ -38,7 +38,7 @@ class FetchValidator implements FetchInterface
 
     public function first(): object
     {
-        $this->queryObject['params'] = InLineParamsAction::inLine($this->queryObject['params']);
+        $this->queryObject['params'] = InLineParamsAction::inLineParams($this->queryObject['params']);
 
         $query = $this->connect->prepare($this->queryObject['query']);
         $query->execute($this->queryObject['params']);

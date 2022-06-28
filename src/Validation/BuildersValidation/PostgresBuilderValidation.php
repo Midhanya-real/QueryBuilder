@@ -31,7 +31,7 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
 
     public function insert(string $table, array $fields): static|bool
     {
-        if (!InsertionQueryValidation::isValidBody($fields)) {
+        if (!InsertionQueryValidation::isValidAssocBody($fields)) {
             return false;
         }
 
@@ -55,7 +55,7 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
 
     public function update(string $table, array $values): bool|static
     {
-        if (!InsertionQueryValidation::isValidBody($values)) {
+        if (!InsertionQueryValidation::isValidAssocBody($values)) {
             return false;
         }
 
@@ -70,7 +70,7 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
 
     public function where(array $condition): bool|static
     {
-        if (!InsertionQueryValidation::isValidBody($condition)) {
+        if (!InsertionQueryValidation::isValidAssocBody($condition)) {
             return false;
         }
 
