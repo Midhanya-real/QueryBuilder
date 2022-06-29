@@ -15,9 +15,9 @@ $exec = new BuilderConstructor($config);
 /*$test = $exec->build()
     ->select('some_table', ['some_table.number', 'test_table.user_name'],)
     ->join('test_table', ['some_table.user_id' => 'test_table.id'])->getQueryObject();*/
-//$test = $exec->build()->select('test_table', ['user_name', 'age'])->orderBy(['user_name' => 'ASC', 'age' => 'DESC'])->getQueryObject();
+$test = $exec->build()->select('test_table', ['user_name', 'age'])->orderBy(['user_name', 'age' => 'DESC'])->getQueryObject();
 //$test = $exec->build()->select('test_table', ['user_name', 'sum(age)' => 'counter'])->groupBy(['user_name', 'counter'])->having('counter', '<', 16)->getQueryObject();
 //print_r($exec->execute($test)->get());
-//print_r($test);
+print_r($test);
 //print_r($test_one);
 //print_r($test_two);
