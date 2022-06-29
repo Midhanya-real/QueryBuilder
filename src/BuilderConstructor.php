@@ -2,7 +2,6 @@
 
 namespace Core;
 
-use Core\Validation\BuildersValidation\PostgresBuilderValidation;
 use Core\Validation\BuildersValidation\PostgresBuilderValidationInterface;
 use Core\Validation\FetchValidation\FetchInterface;
 

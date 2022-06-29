@@ -113,7 +113,7 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
 
     public function limit(int $limit): bool|static
     {
-        if ($this->type != 'where') {
+        if ($this->type != 'select') {
             return false;
         }
 
@@ -124,7 +124,7 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
 
     public function offset(int $limit): bool|static
     {
-        if ($this->type != 'where') {
+        if ($this->type != 'select') {
             return false;
         }
 
