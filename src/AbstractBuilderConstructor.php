@@ -58,7 +58,7 @@ abstract class AbstractBuilderConstructor
         };
     }
 
-    abstract public function build(): PostgresBuilderValidation;
+    abstract public function build(): PostgresBuilderValidationInterface;
 
     abstract public function execute(array $queryObject): FetchInterface;
 }

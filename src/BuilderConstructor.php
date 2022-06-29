@@ -3,11 +3,12 @@
 namespace Core;
 
 use Core\Validation\BuildersValidation\PostgresBuilderValidation;
+use Core\Validation\BuildersValidation\PostgresBuilderValidationInterface;
 use Core\Validation\FetchValidation\FetchInterface;
 
 class BuilderConstructor extends AbstractBuilderConstructor
 {
-    public function build(): PostgresBuilderValidation
+    public function build(): PostgresBuilderValidationInterface
     {
         return $this->getBuilderValidator();
     }
