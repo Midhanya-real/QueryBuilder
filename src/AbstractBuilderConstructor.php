@@ -6,6 +6,8 @@ use Core\Connection\PgsqlConnection;
 use Core\DataBase\BuilderProvider;
 use Core\DataBase\BuilderProviderInterface;
 use Core\DataBase\DataBases\PostgresBuilderInterface;
+use Core\Handlers\PostgresHandler;
+use Core\Handlers\PostgresHandlerInterface;
 use Core\Validation\BuildersValidation\PostgresBuilderValidation;
 use Core\Validation\BuildersValidation\PostgresBuilderValidationInterface;
 use Core\Validation\FetchValidation\FetchValidator;
@@ -58,7 +60,16 @@ abstract class AbstractBuilderConstructor
         };
     }
 
-    abstract public function build(): PostgresBuilderValidationInterface;
+    protected function getHandler(): PostgresHandlerInterface
+    {
+        return match ($this->config['Connection']) {
+            'pgsql' => new PostgresHandler($this->getBuilderValidator()),
+
+            //
+        };
+    }
+
+    abstract public function build(): PostgresHandlerInterface;
 
     abstract public function execute(array $queryObject): FetchInterface;
 }

@@ -8,10 +8,6 @@ use Core\DataBase\DataBases\PostgresBuilderInterface;
 
 class PostgresBuilderValidation implements PostgresBuilderValidationInterface
 {
-    private string $query = '';
-    private string $type;
-    private array $params = [];
-
     private PostgresBuilderInterface $builder;
 
     public function __construct(PostgresBuilderInterface $builder)
@@ -19,41 +15,33 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
         $this->builder = $builder;
     }
 
-    public function select(string $table, array $fields): static
+    public function select(string $table, array $fields): string
     {
-        $this->type = 'select';
         empty($fields) ? $rows['body'] = ['*'] : $rows = BodyConverterAction::getSelectBody($fields);
 
-        $this->query = $this->builder->select(table: $table, fields: $rows);
-
-        return $this;
+        return $this->builder->select(table: $table, fields: $rows);
     }
 
-    public function insert(string $table, array $fields): static|bool
+    public function insert(string $table, array $fields): array|bool
     {
         if (!InsertionQueryValidation::isValidAssocBody($fields)) {
             return false;
         }
 
-        $this->type = 'insert';
-
         $queryBody = BodyConverterAction::getInsertBody($fields);
 
-        $this->query = $this->builder->insert(table: $table, fields: $queryBody);
-        $this->params[] = array_values($fields);
-
-        return $this;
+        return [
+            'query' => $this->builder->insert(table: $table, fields: $queryBody),
+            'params' => array_values($fields)
+        ];
     }
 
-    public function delete(string $table): static
+    public function delete(string $table): string
     {
-        $this->type = 'delete';
-        $this->query = $this->builder->delete(table: $table);
-
-        return $this;
+        return $this->builder->delete(table: $table);
     }
 
-    public function update(string $table, array $values): bool|static
+    public function update(string $table, array $values): array|bool
     {
         if (!InsertionQueryValidation::isValidAssocBody($values)) {
             return false;
@@ -61,122 +49,69 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
 
         $set = BodyConverterAction::getSetBody($values);
 
-        $this->type = 'update';
-        $this->query = $this->builder->update(table: $table, values: $set);
-        $this->params[] = $set['params'];
-
-        return $this;
+        return [
+            'query' => $this->builder->update(table: $table, values: $set),
+            'params' => $set['params']
+        ];
     }
 
-    public function where(array $condition): bool|static
+    public function where(array $condition): array|bool
     {
         if (!InsertionQueryValidation::isValidAssocBody($condition)) {
             return false;
         }
 
-        if (!in_array($this->type, ['select', 'insert', 'update', 'delete'])) {
-            return false;
-        }
-
-        $this->type = 'where';
-
         $conditions = BodyConverterAction::getSetBody($condition);
-        $this->query .= $this->builder->where(condition: $conditions);
-        $this->params[] = $conditions['params'];
 
-        return $this;
+        return [
+            'query' => $this->builder->where(condition: $conditions),
+            'params' => $conditions['params']
+        ];
     }
 
-    public function join(string $table, array $keys): bool|static
+    public function join(string $table, array $keys): string
     {
-        if ($this->type != 'select') {
-            return false;
-        }
-
         $condition = BodyConverterAction::getSetBody($keys, false);
-        $this->query .= $this->builder->join(table: $table, keys: $condition);
 
-        return $this;
+        return $this->builder->join(table: $table, keys: $condition);
     }
 
-    public function outJoin(string $table, array $keys): bool|static
+    public function outJoin(string $table, array $keys): string
     {
-        if ($this->type != 'select') {
-            return false;
-        }
-
         $condition = BodyConverterAction::getSetBody($keys);
-        $this->query .= $this->builder->outJoin(table: $table, keys: $condition);
 
-        return $this;
+        return $this->builder->outJoin(table: $table, keys: $condition);
     }
 
-    public function limit(int $limit): bool|static
+    public function limit(int $limit): string
     {
-        if ($this->type != 'select') {
-            return false;
-        }
-
-        $this->query .= $this->builder->limit(limit: $limit);
-
-        return $this;
+        return $this->builder->limit(limit: $limit);
     }
 
-    public function offset(int $limit): bool|static
+    public function offset(int $limit): string
     {
-        if ($this->type != 'select') {
-            return false;
-        }
-
-        $this->query .= $this->builder->offset(limit: $limit);
-
-        return $this;
+        return $this->builder->offset(limit: $limit);
     }
 
-    public function groupBy(array $groupColumns): bool|static
+    public function groupBy(array $groupColumns): string
     {
-        if ($this->type != 'select') {
-            return false;
-        }
-
         $groupColumns = BodyConverterAction::getSelectBody($groupColumns);
 
-        $this->type = 'groupBy';
-        $this->query .= $this->builder->groupBy(groupColumns: $groupColumns);
-
-        return $this;
+        return $this->builder->groupBy(groupColumns: $groupColumns);
     }
 
-    public function orderBy(array $orderValues): bool|static
+    public function orderBy(array $orderValues): string
     {
-        if ($this->type != 'select') {
-            return false;
-        }
-
         $orderValues = BodyConverterAction::getOrderBody($orderValues);
-        $this->query .= $this->builder->orderBy(orderValues: $orderValues);
 
-        return $this;
+        return $this->builder->orderBy(orderValues: $orderValues);
     }
 
-    public function having(string $agrFunc, string $sign, string $value): bool|static
+    public function having(string $agrFunc, string $sign, string $value): array
     {
-        if ($this->type != 'groupBy') {
-            return false;
-        }
-
-        $this->query .= $this->builder->having(agrFunc: $agrFunc, sign: $sign, value: '?');
-        $this->params[] = [$value];
-
-        return $this;
-    }
-
-    public function getQueryObject(): array
-    {
-        $this->query .= ';';
         return [
-            'query' => $this->query,
-            'params' => $this->params
+            'query' => $this->builder->having(agrFunc: $agrFunc, sign: $sign, value: '?'),
+            'params' => [$value]
         ];
     }
 }

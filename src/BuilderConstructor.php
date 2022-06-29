@@ -2,14 +2,14 @@
 
 namespace Core;
 
-use Core\Validation\BuildersValidation\PostgresBuilderValidationInterface;
+use Core\Handlers\PostgresHandlerInterface;
 use Core\Validation\FetchValidation\FetchInterface;
 
 class BuilderConstructor extends AbstractBuilderConstructor
 {
-    public function build(): PostgresBuilderValidationInterface
+    public function build(): PostgresHandlerInterface
     {
-        return $this->getBuilderValidator();
+        return $this->getHandler();
     }
 
     public function execute(array $queryObject): FetchInterface

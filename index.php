@@ -13,9 +13,9 @@ $exec = new BuilderConstructor($config);
 //$test = $exec->build()->delete('some_table')->where(['number' => 8125])->getQueryObject();
 //$test = $exec->build()->update('some_table', ['number' => 8125])->where(['number' => 8124])->getQueryObject();
 /*$test = $exec->build()
-    ->select('some_table', ['some_table.number', 'test_table.user_name'],)
+    ->select('some_table', ['some_table.number' => 'phone', 'test_table.user_name' => 'first_name'],)
     ->join('test_table', ['some_table.user_id' => 'test_table.id'])->getQueryObject();*/
-$test = $exec->build()->select('test_table', ['user_name', 'age'])->orderBy(['user_name', 'age' => 'DESC'])->getQueryObject();
-//$test = $exec->build()->select('test_table', ['user_name', 'sum(age)' => 'counter'])->groupBy(['user_name', 'counter'])->having('counter', '<', 16)->getQueryObject();
-print_r($exec->execute($test)->get());
+//$test = $exec->build()->select('test_table', ['user_name', 'age'])->orderBy(['user_name', 'age' => 'DESC'])->getQueryObject();
+//$test = $exec->build()->select('test_table', ['user_name', 'sum(age)' => 'counter'])->groupBy(['user_name', 'age'])->having('age', '<', 16)->getQueryObject();
+//print_r($exec->execute($test)->get());
 //print_r($test);
