@@ -7,10 +7,10 @@ class Config
     private static array $config = [
         'Connection' => 'pgsql',
         'Host' => 'localhost',
-        'Port' => '5432',
-        'DataBase' => 'QueryTester',
-        'UserName' => 'postgres',
-        'Password' => '1234',
+        'Port' => 'some_pass',
+        'DataBase' => 'some_base',
+        'UserName' => 'some_user',
+        'Password' => 'some_user_pass',
     ];
 
     public static function getConfig(): array
