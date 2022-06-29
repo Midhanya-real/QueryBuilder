@@ -17,5 +17,4 @@ $exec = new BuilderConstructor($config);
     ->join('test_table', ['some_table.user_id' => 'test_table.id'])->getQueryObject();*/
 //$test = $exec->build()->select('test_table', ['user_name', 'age'])->orderBy(['user_name', 'age' => 'DESC'])->getQueryObject();
 //$test = $exec->build()->select('test_table', ['user_name', 'sum(age)' => 'counter'])->groupBy(['user_name', 'age'])->having('age', '<', 16)->getQueryObject();
-//print_r($exec->execute($test)->get());
-//print_r($test);
+//$exec->execute($test)->get();
