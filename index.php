@@ -9,8 +9,8 @@ $exec = new BuilderConstructor($config);
 
 
 //$test = $exec->build()->select('some_table', ['some_table.id' => 'serial', 'some_table.number' => 'phone'])->getQueryObject();
-//$test_one = $exec->build()->insert('some_table', ['id' => 2, 'number' => 8124, 'user_id' => 1])->getQueryObject();
-//$test_two = $exec->build()->delete('some_table')->where(['number' => 8125])->getQueryObject();
+//$test = $exec->build()->insert('some_table', ['id' => 2, 'number' => 8124, 'user_id' => 1])->getQueryObject();
+//$test = $exec->build()->delete('some_table')->where(['number' => 8125])->getQueryObject();
 //$test = $exec->build()->update('some_table', ['number' => 8125])->where(['number' => 8124])->getQueryObject();
 /*$test = $exec->build()
     ->select('some_table', ['some_table.number', 'test_table.user_name'],)
