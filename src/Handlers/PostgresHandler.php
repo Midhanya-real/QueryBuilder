@@ -23,7 +23,7 @@ class PostgresHandler implements PostgresHandlerInterface
         return $this;
     }
 
-    public function insert(string $table, array $fields): static|bool
+    public function insert(string $table, array $fields): static
     {
         $queryObject = $this->builderValidation->insert($table, $fields);
 
@@ -43,7 +43,7 @@ class PostgresHandler implements PostgresHandlerInterface
         return $this;
     }
 
-    public function update(string $table, array $values): static|bool
+    public function update(string $table, array $values): static
     {
         $queryObject = $this->builderValidation->update($table, $values);
 
@@ -56,7 +56,7 @@ class PostgresHandler implements PostgresHandlerInterface
 
     }
 
-    public function where(array $condition): static|bool
+    public function where(array $condition): static
     {
         $queryObject = $this->builderValidation->where($condition);
 
@@ -68,7 +68,7 @@ class PostgresHandler implements PostgresHandlerInterface
         return $this;
     }
 
-    public function join(string $table, array $keys): static|bool
+    public function join(string $table, array $keys): static
     {
         $queryObject = $this->builderValidation->join($table, $keys);
 
@@ -79,7 +79,7 @@ class PostgresHandler implements PostgresHandlerInterface
         return $this;
     }
 
-    public function outJoin(string $table, array $keys): static|bool
+    public function outJoin(string $table, array $keys): static
     {
         $queryObject = $this->builderValidation->outJoin($table, $keys);
 
@@ -90,7 +90,7 @@ class PostgresHandler implements PostgresHandlerInterface
         return $this;
     }
 
-    public function limit(int $limit): static|bool
+    public function limit(int $limit): static
     {
         $queryObject = $this->builderValidation->limit($limit);
 
@@ -101,7 +101,7 @@ class PostgresHandler implements PostgresHandlerInterface
         return $this;
     }
 
-    public function offset(int $limit): static|bool
+    public function offset(int $limit): static
     {
         $queryObject = $this->builderValidation->offset($limit);
 
@@ -112,7 +112,7 @@ class PostgresHandler implements PostgresHandlerInterface
         return $this;
     }
 
-    public function groupBy(array $groupColumns): static|bool
+    public function groupBy(array $groupColumns): static
     {
         $queryObject = $this->builderValidation->groupBy($groupColumns);
 
@@ -123,7 +123,7 @@ class PostgresHandler implements PostgresHandlerInterface
         return $this;
     }
 
-    public function orderBy(array $orderValues): static|bool
+    public function orderBy(array $orderValues): static
     {
         $queryObject = $this->builderValidation->orderBy($orderValues);
 
@@ -134,7 +134,7 @@ class PostgresHandler implements PostgresHandlerInterface
         return $this;
     }
 
-    public function having(string $agrFunc, string $sign, string $value): static|bool
+    public function having(string $agrFunc, string $sign, string $value): static
     {
         $queryObject = $this->builderValidation->having($agrFunc, $sign, $value);
 
