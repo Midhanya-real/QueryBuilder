@@ -32,5 +32,5 @@ interface PostgresHandlerInterface extends CRUDMethodsInterface, SortMethodsInte
 
     public function having(string $agrFunc, string $sign, string $value): static|bool;
 
-    public function getQueryObject(): array;
+    public function getQueryObject(): array|bool;
 }

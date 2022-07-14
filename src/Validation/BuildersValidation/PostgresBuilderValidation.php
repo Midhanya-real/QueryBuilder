@@ -9,17 +9,22 @@ use Core\DataBase\DataBases\PostgresBuilderInterface;
 class PostgresBuilderValidation implements PostgresBuilderValidationInterface
 {
     private PostgresBuilderInterface $builder;
+    private string $type = '';
 
     public function __construct(PostgresBuilderInterface $builder)
     {
         $this->builder = $builder;
     }
 
-    public function select(string $table, array $fields): string
+    public function select(string $table, array $fields): array
     {
+        $this->type = 'select';
+
         empty($fields) ? $rows['body'] = ['*'] : $rows = BodyConverterAction::getSelectBody($fields);
 
-        return $this->builder->select(table: $table, fields: $rows);
+        return [
+            'query' => $this->builder->select(table: $table, fields: $rows)
+        ];
     }
 
     public function insert(string $table, array $fields): array|bool
@@ -27,6 +32,8 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
         if (!InsertionQueryValidation::isValidAssocBody($fields)) {
             return false;
         }
+
+        $this->type = 'insert';
 
         $queryBody = BodyConverterAction::getInsertBody($fields);
 
@@ -36,9 +43,13 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
         ];
     }
 
-    public function delete(string $table): string
+    public function delete(string $table): array
     {
-        return $this->builder->delete(table: $table);
+        $this->type = 'delete';
+
+        return [
+            'query' => $this->builder->delete(table: $table)
+        ];
     }
 
     public function update(string $table, array $values): array|bool
@@ -46,6 +57,8 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
         if (!InsertionQueryValidation::isValidAssocBody($values)) {
             return false;
         }
+
+        $this->type = 'update';
 
         $set = BodyConverterAction::getSetBody($values);
 
@@ -61,6 +74,12 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
             return false;
         }
 
+        if(!in_array($this->type, ['select', 'insert', 'update', 'delete'])){
+            return false;
+        }
+
+        $this->type = 'where';
+
         $conditions = BodyConverterAction::getSetBody($condition);
 
         return [
@@ -69,46 +88,86 @@ class PostgresBuilderValidation implements PostgresBuilderValidationInterface
         ];
     }
 
-    public function join(string $table, array $keys): string
+    public function join(string $table, array $keys): array|bool
     {
+        if ($this->type != 'select') {
+            return false;
+        }
+
         $condition = BodyConverterAction::getSetBody($keys, false);
 
-        return $this->builder->join(table: $table, keys: $condition);
+        return [
+            'query' => $this->builder->join(table: $table, keys: $condition)
+        ];
     }
 
-    public function outJoin(string $table, array $keys): string
+    public function outJoin(string $table, array $keys): array|bool
     {
+        if ($this->type != 'select') {
+            return false;
+        }
+
         $condition = BodyConverterAction::getSetBody($keys);
 
-        return $this->builder->outJoin(table: $table, keys: $condition);
+        return [
+            'query' => $this->builder->outJoin(table: $table, keys: $condition)
+        ];
     }
 
-    public function limit(int $limit): string
+    public function limit(int $limit): array|bool
     {
-        return $this->builder->limit(limit: $limit);
+        if ($this->type != 'select') {
+            return false;
+        }
+
+        return [
+            'query' => $this->builder->limit(limit: $limit)
+        ];
     }
 
-    public function offset(int $limit): string
+    public function offset(int $limit): array|bool
     {
-        return $this->builder->offset(limit: $limit);
+        if ($this->type != 'select') {
+            return false;
+        }
+
+        return [
+            'query' => $this->builder->offset(limit: $limit)
+        ];
     }
 
-    public function groupBy(array $groupColumns): string
+    public function groupBy(array $groupColumns): array|bool
     {
+        if ($this->type != 'select') {
+            return false;
+        }
+
         $groupColumns = BodyConverterAction::getSelectBody($groupColumns);
 
-        return $this->builder->groupBy(groupColumns: $groupColumns);
+        return [
+            'query' => $this->builder->groupBy(groupColumns: $groupColumns)
+        ];
     }
 
-    public function orderBy(array $orderValues): string
+    public function orderBy(array $orderValues): array|bool
     {
+        if ($this->type != 'select') {
+            return false;
+        }
+
         $orderValues = BodyConverterAction::getOrderBody($orderValues);
 
-        return $this->builder->orderBy(orderValues: $orderValues);
+        return [
+            'query' => $this->builder->orderBy(orderValues: $orderValues)
+        ];
     }
 
-    public function having(string $agrFunc, string $sign, string $value): array
+    public function having(string $agrFunc, string $sign, string $value): array|bool
     {
+        if ($this->type != 'groupBy') {
+            return false;
+        }
+
         return [
             'query' => $this->builder->having(agrFunc: $agrFunc, sign: $sign, value: '?'),
             'params' => [$value]
