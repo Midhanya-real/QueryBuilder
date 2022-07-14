@@ -23,7 +23,7 @@ abstract class AbstractBuilderConstructor
         $this->config = $config;
     }
 
-    protected function getDB(): BuilderProviderInterface
+    protected function getDB(): BuilderProvider
     {
         return new BuilderProvider();
     }

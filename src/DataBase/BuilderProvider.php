@@ -3,11 +3,10 @@
 namespace Core\DataBase;
 
 use Core\DataBase\DataBases\PostgresBuilder;
-use Core\DataBase\DataBases\PostgresBuilderInterface;
 
-class BuilderProvider implements BuilderProviderInterface
+class BuilderProvider
 {
-    public function pgsql(): PostgresBuilderInterface
+    public function pgsql(): PostgresBuilder
     {
         return new PostgresBuilder();
     }
